@@ -515,3 +515,80 @@ async register() {
 The result can be viewed using the `Vue DevTool` plugin in Chrome:
 
 ![Store Register](./img/store-register.png)
+
+## Logout the user
+
+The logout logic is pretty straight-forward. All we need to do is call the `logout` method of the `AuthenticationService` and clear the user state object in the Vuex store.
+
+Let's start by adding an action in the store to clear the user:
+
+```js
+actions: {
+
+  login({ commit }, user) {
+    console.log(`Storing user ...`);
+    commit("setUser", user);
+  },
+
+  logout({ commit }) {
+    console.log(`Clearing user ...`);
+    commit("setUser", {});
+  }
+
+},
+```
+
+Now add a `logout` handler for the button in `App.vue` where you call the `logout` method of `AuthenticationService` and dispatch the `logout` action when this is achieved succesfully:
+
+```html
+<v-btn color="white" @click="logout" text>Logout</v-btn>
+```
+
+```js
+import AuthenticationService from "@/services/AuthenticationService";
+export default {
+  name: "App",
+  methods: {
+    async logout() {
+      console.log("Logging out user ...");
+
+      try {
+        await AuthenticationService.logout();
+        console.log("User succesfully logged out");
+
+        // Clear user in store
+        this.$store.dispatch("logout");
+      } catch (error) {
+        console.log("Logout failed");
+        console.log(error);
+      }
+    }
+  }
+};
+```
+
+**If you test this you will notice that the logout action will fail with a 401.**
+
+![Logout Fails](./img/logout-fails.png)
+
+The reason behind this is the fact that no credentials are send to the backend and the `logout` is a protected route that can only be accessed by an **authenticad user**. We will need to tell axios to send the current session cookie with each request to the backend.
+
+This can be achieved by settings `withCredentials` to `true` when creating the axios instance. Edit the `services/Api.js` file as shown below:
+
+```js
+import axios from "axios";
+
+export default () => {
+  let api = axios.create({
+    baseURL: `http://localhost:8081`,
+    withCredentials: true   // Automatically send cookies along
+  });
+
+  return api
+};
+```
+
+Which should fix the logout logic:
+
+![Logout Ok](./img/logout-ok.png)
+

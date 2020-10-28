@@ -7,7 +7,7 @@
       <v-toolbar-items>
         <v-btn color="white" to="/register" text>Register</v-btn>
         <v-btn color="white" to="/login" text>Login</v-btn>
-        <v-btn color="white" text>Logout</v-btn>
+        <v-btn color="white" @click="logout" text>Logout</v-btn>
       </v-toolbar-items>
     </v-app-bar>
 
@@ -20,7 +20,24 @@
 </template>
 
 <script>
+import AuthenticationService from "@/services/AuthenticationService";
 export default {
   name: "App",
+  methods: {
+    async logout() {
+      console.log("Logging out user ...");
+
+      try {
+        await AuthenticationService.logout();
+        console.log("User succesfully logged out");
+
+        // Clear user in store
+        this.$store.dispatch("logout");
+      } catch (error) {
+        console.log("Logout failed");
+        console.log(error);
+      }
+    }
+  }
 };
 </script>

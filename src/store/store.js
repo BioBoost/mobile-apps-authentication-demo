@@ -27,6 +27,11 @@ export default new Vuex.Store({
       commit("setUser", user);
     },
 
+    logout({ commit }) {
+      console.log(`Clearing user ...`);
+      commit("setUser", {});
+    }
+
   },
 
   // Access state (can also filter state data here)
