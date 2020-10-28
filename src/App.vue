@@ -3,6 +3,13 @@
     <v-app-bar
       app color="red"
     >
+    
+      <v-toolbar-items class="d-none d-sm-flex" v-if="isUserLoggedIn">
+        <v-btn to="/" text class="white--text px-12 no-background-hover">
+          {{ username }}
+        </v-btn>
+      </v-toolbar-items>
+
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn color="white" to="/register" text>Register</v-btn>
@@ -37,6 +44,15 @@ export default {
         console.log("Logout failed");
         console.log(error);
       }
+    }
+  },
+  computed: {
+    username() {
+      let user = this.$store.getters.getUser;
+      return `${user.firstname} ${user.lastname}`
+    },
+    isUserLoggedIn() {
+      return !!this.$store.getters.getUser.id
     }
   }
 };

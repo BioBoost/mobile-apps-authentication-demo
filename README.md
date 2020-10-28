@@ -645,3 +645,61 @@ export default {
 ```
 
 Don't forget to call the `login` action of the store with the user object retrieved from the api.
+
+## Display the Users Name
+
+Let's display the username in the app-bar of the application.
+
+```html
+<v-app-bar
+  app color="red"
+>
+
+  <v-toolbar-items class="d-none d-sm-flex">
+    <v-btn to="/" text class="white--text px-12 no-background-hover">
+      {{ username }}
+    </v-btn>
+  </v-toolbar-items>
+
+  <v-spacer></v-spacer>
+  <v-toolbar-items>
+    <v-btn color="white" to="/register" text>Register</v-btn>
+    <v-btn color="white" to="/login" text>Login</v-btn>
+    <v-btn color="white" @click="logout" text>Logout</v-btn>
+  </v-toolbar-items>
+</v-app-bar>
+```
+
+`username` can then be a computed property that gets its information from the store using the getter we provided:
+
+```js
+computed: {
+  username() {
+    let user = this.$store.getters.getUser;
+    return `${user.firstname} ${user.lastname}`
+  }
+}
+```
+
+Logging in should now result in a username being displayed in the top left of the application bar.
+
+If you only wish to display the `username` when a user is logged in, you can created another computed property and toggle the component using a `v-if` bind:
+
+```html
+<v-toolbar-items class="d-none d-sm-flex" v-if="isUserLoggedIn">
+```
+
+```js
+computed: {
+  username() {
+    let user = this.$store.getters.getUser;
+    return `${user.firstname} ${user.lastname}`
+  },
+  isUserLoggedIn() {
+    return !!this.$store.getters.getUser.id
+  }
+}
+```
+
+Or you could create a store getter that return `true` if a user is logged in!
+
