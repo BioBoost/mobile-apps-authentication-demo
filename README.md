@@ -396,3 +396,45 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 ```
+
+### Some information about the Store
+
+Basically the store provides the following functionality for us to allow the internal state to be managed:
+
+* state: the state object is the javascript object that will track the current state. Kinda like `data` does in our components.
+* getters: methods that allow us to retrieve state and also provide reactivity. Very similar to `computed` methods in components.
+* actions: update state. Kinda like `methods` that change the internal `data` of our components. Actions are allowed to be async, meaning they can make for example API calls via axios.
+* mutations: commit and track state changes. They are the ones that actually change the internal state and allowing changes to be tracked. These should be called by the `actions` via `commit`, because you cannot directly call a mutation handler. Think of it more like event registration. One important rule to remember is that mutation handler functions must be **synchronous**.
+
+By adding some placeholders to the `store/store.js` module this all becomes a bit more clear:
+
+```js
+import Vue from "vue";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  strict: true,
+
+  state: {
+
+  },
+
+  // Commit and track state changes
+  mutations: {
+
+  },
+
+  // Async API requests and updating state through mutations
+  actions: {
+
+  },
+
+  // Access state (can also filter state data here)
+  getters: {
+
+  }
+
+});
+```
