@@ -12,6 +12,7 @@
 
       <v-spacer></v-spacer>
       <v-toolbar-items>
+        <v-btn color="white" to="/protected" text>Protected</v-btn>
         <v-btn color="white" to="/register" text>Register</v-btn>
         <v-btn color="white" to="/login" text>Login</v-btn>
         <v-btn color="white" @click="logout" text>Logout</v-btn>

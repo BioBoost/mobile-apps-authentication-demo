@@ -731,3 +731,84 @@ export default new Vuex.Store({
 
 // ....
 ```
+
+## Protecting Frontend Routes
+
+Last but not least we should also be able to protect our frontend routes from users that are not authorized. Let's start by creating a `Protected.vue` view:
+
+```vue
+<template>
+
+  <v-row align="center" justify="center">
+    <v-col cols="12" md="8">
+
+      <p>This is a protected page that should only be visible for logged in users.</p>
+
+    </v-col>
+  </v-row>
+  
+</template>
+
+<script>
+export default {
+  name: 'Protected',
+}
+</script>
+```
+
+Also add a route for it:
+
+```js
+import Protected from '@/views/Protected.vue'
+
+// ...
+
+{
+  path: '/protected',
+  name: 'Protected',
+  component: Protected
+},
+```
+
+And add a navigational button in `App.vue` so we can easily try to access the route:
+
+```html
+<v-btn color="white" to="/protected" text>Protected</v-btn>
+```
+
+Now if you test the route, you should notice that it is accessible even if not logged in.
+
+Luckily we can protect the required routes from within the routes by checking if a user is authorized to access the route he/she wishes to traverse to.
+
+Open the `router/index.js` file and add the `Store` as an import because that is where we'll be getting our user object from:
+
+```js
+import Store from "@/store/store";
+```
+
+Next protect the `/protected` route using the code snippet below:
+
+```js
+{
+  path: '/protected',
+  name: 'Protected',
+  component: Protected,
+  beforeEnter: (to, from, next) => {
+    if (!Store.getters.getUser.id) {
+      console.log("Unauthorized");
+      next("/login");
+    }
+    next();
+  }
+}
+```
+
+The `beforeEnter` hook is a handler that can be used to check if the user is authorized to access the route. If not, he/she can be redirected to another route.
+
+Calling `next()` without arguments just continues on.
+
+Now if the user tries to access the `/protected` route without being logged in, he/she will be redirected to the `/login` view.
+
+## Wrapping it Up
+
+That's it. Your app now has some basic authentication and authorization build in. Once you setup the whole system we'll be able to fully protect all routes in our backend.
