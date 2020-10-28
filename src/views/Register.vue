@@ -92,6 +92,10 @@ export default {
 
         console.log("User succesfully registered");
         console.log(response);
+
+        // Save user in store
+        this.$store.dispatch("login", response.data);
+
       } catch (error) {
         console.log("Register failed");
         console.log(error);

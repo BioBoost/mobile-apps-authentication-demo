@@ -438,3 +438,80 @@ export default new Vuex.Store({
 
 });
 ```
+
+## Keeping track of the Logged in User
+
+The store provides us now with the capability to track the current logged in user and make its information application-wide available.
+
+For this we will need:
+
+* a user object in the `state`
+
+  ```js
+  state: {
+    user: {},
+  },
+  ```
+
+* a mutution that allows us to commit the user in the store
+
+  ```js
+  mutations: {
+    setUser(state, user) {
+      state.user = user;
+    },
+  },
+  ```
+
+* an action that can be called from within our components
+
+  ```js
+  actions: {
+    login({ commit }, user) {
+      console.log(`Storing user ...`);
+      commit("setUser", user);
+    },
+  },
+  ```
+
+* a getter to make the user available in our components
+
+```js
+  // Access state (can also filter state data here)
+  getters: {
+    getUser(state) {
+      return state.user;
+    },
+  }
+```
+
+Now when the user is succesfully registered, we can take the response from the server and commit it in the store via the `setUser` action:
+
+```js
+async register() {
+  console.log("Trying to register user ...");
+
+  try {
+    const response = await AuthenticationService.register({
+      firstname: this.firstname,
+      lastname: this.lastname,
+      email: this.email,
+      password: Crypto.createHash("sha256").update(this.password).digest("hex"),
+    });
+
+    console.log("User succesfully registered");
+    console.log(response);
+
+    // Save user in store
+    this.$store.dispatch("login", response.data);
+
+  } catch (error) {
+    console.log("Register failed");
+    console.log(error);
+  }
+}
+```
+
+The result can be viewed using the `Vue DevTool` plugin in Chrome:
+
+![Store Register](./img/store-register.png)
