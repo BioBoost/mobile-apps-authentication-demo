@@ -347,3 +347,52 @@ Note that the `register` function needs to be made `async` because the `axios` c
 This should result in a working registration setup:
 
 ![Register](./img/register.png)
+
+## Storing the User
+
+Now that the register process is up and running we'll need a way to store our `user` object throughout the application. We could emit the user and save it in the app and pass it down each component that needs it but thats not such a good idea. It's also not very clean.
+
+The user will be required in many places, for showing information, checking credentials, ...
+
+A much cleaner solution is the `vuex` store which allows our app to keep global state. It serves as a centralized data store for our whole application.
+
+More information can be found here: [Vuex](https://vuex.vuejs.org/).
+
+### Installing Vuex
+
+Let's start by installing the `vuex` package.
+
+```bash
+yarn add vuex
+```
+
+### Setup the store
+
+Next we'll need to setup the store and pass it to `Vue` so it will become available globally. Do this by creating a file `store/store.js` with the following content:
+
+```js
+import Vue from "vue";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  strict: true
+});
+```
+
+and import the file inside `main.js` and pass the `Vuex` instance to `Vue`:
+
+```js
+// ...
+import store from "./store/store";
+
+// ...
+
+new Vue({
+  router,
+  vuetify,
+  store,
+  render: h => h(App)
+}).$mount('#app')
+```
