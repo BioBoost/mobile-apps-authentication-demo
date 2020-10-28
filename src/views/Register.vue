@@ -37,7 +37,7 @@
               
         <v-row align="center" justify="center">
           <v-col cols="12">
-            <v-btn block color="primary" >Register</v-btn>
+            <v-btn block color="primary" @click="register">Register</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -47,6 +47,9 @@
 </template>
 
 <script>
+import AuthenticationService from "@/services/AuthenticationService";
+import Crypto from "crypto";
+
 export default {
   name: 'Register',
   components: {
@@ -74,5 +77,26 @@ export default {
       ],
     }
   },
+
+  methods: {
+    async register() {
+      console.log("Trying to register user ...");
+
+      try {
+        const response = await AuthenticationService.register({
+          firstname: this.firstname,
+          lastname: this.lastname,
+          email: this.email,
+          password: Crypto.createHash("sha256").update(this.password).digest("hex"),
+        });
+
+        console.log("User succesfully registered");
+        console.log(response);
+      } catch (error) {
+        console.log("Register failed");
+        console.log(error);
+      }
+    }
+  }
 }
 </script>

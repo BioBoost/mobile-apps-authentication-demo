@@ -291,3 +291,59 @@ export default {
   },
 };
 ```
+
+## Registering a User
+
+Time to allow a user to register him/herself.
+
+Start by adding an event handler to the `register` button in the `Register` view. Add a `console.log` or something.
+
+```html
+<v-btn block color="primary" @click="register">Register</v-btn>
+```
+
+```js
+methods: {
+  register() {
+    console.log("Trying to register user ...");
+  }
+}
+```
+
+If this works, its time to call the real logic. For this we'll need to import the `AuthenticationService`. We'll also be hashing the password before sending it to the backend, so we will also need the `crypto` package.
+
+```js
+import AuthenticationService from "@/services/AuthenticationService";
+import Crypto from "crypto";
+```
+
+Call the `register` method of the `AuthenticationService` inside a `try-catch` and make sure to pass the user credentials:
+
+```js
+methods: {
+  async register() {
+    console.log("Trying to register user ...");
+
+    try {
+      const response = await AuthenticationService.register({
+        firstname: this.firstname,
+        lastname: this.lastname,
+        email: this.email,
+        password: Crypto.createHash("sha256").update(this.password).digest("hex"),
+      });
+
+      console.log("User succesfully registered");
+      console.log(response);
+    } catch (error) {
+      console.log("Register failed");
+      console.log(error);
+    }
+  }
+}
+```
+
+Note that the `register` function needs to be made `async` because the `axios` call is async and we're awaiting it.
+
+This should result in a working registration setup:
+
+![Register](./img/register.png)
