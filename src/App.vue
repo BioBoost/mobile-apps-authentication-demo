@@ -5,7 +5,7 @@
     >
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn color="white" text>Register</v-btn>
+        <v-btn color="white" to="/register" text>Register</v-btn>
         <v-btn color="white" text>Login</v-btn>
         <v-btn color="white" text>Logout</v-btn>
       </v-toolbar-items>

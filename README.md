@@ -143,3 +143,25 @@ export default {
 }
 </script>
 ```
+
+## Navigating to the Register view
+
+Add a route to the `router` to the `Register` view:
+
+```js
+import Register from '@/views/Register.vue'
+
+//....
+
+{
+  path: '/register',
+  name: 'Register',
+  component: Register
+},
+```
+
+Now you can link to the route from the `Register` button in `App.vue`:
+
+```html
+<v-btn color="white" to="/register" text>Register</v-btn>
+```
