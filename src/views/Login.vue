@@ -21,7 +21,7 @@
               
         <v-row align="center" justify="center">
           <v-col cols="12">
-            <v-btn block color="primary">Login</v-btn>
+            <v-btn block color="primary" @click="login">Login</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -31,6 +31,9 @@
 </template>
 
 <script>
+import AuthenticationService from "@/services/AuthenticationService";
+import Crypto from "crypto";
+
 export default {
   name: 'Login',
   components: {
@@ -44,13 +47,29 @@ export default {
 
       emailRules: [
         v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
       ],
       passwordRules: [
         v => !!v || 'Password is required',
-        v => v.length >= 12 || 'Password must be more than 12 characters',
       ],
     }
   },
+
+  methods: {
+    async login() {
+      try {
+        const response = await AuthenticationService.login({
+          email: this.email,
+          password: Crypto.createHash("sha256").update(this.password).digest("hex"),
+        });
+
+        console.log(response);
+        this.$store.dispatch("login", response.data);
+
+      } catch (error) {
+        console.log("Login failed");
+        console.log(error);
+      }
+    },
+  }
 }
 </script>

@@ -592,3 +592,56 @@ Which should fix the logout logic:
 
 ![Logout Ok](./img/logout-ok.png)
 
+## Login the User
+
+Now its time to allow a user to login again after logging out. Add an event handler to the `login` button of the `Login.vue` view and call the `AuthenticationService` `login` method.
+
+```html
+<v-btn block color="primary" @click="login">Login</v-btn>
+```
+
+```js
+import AuthenticationService from "@/services/AuthenticationService";
+import Crypto from "crypto";
+
+export default {
+  name: 'Login',
+  components: {
+  },
+  data: function() {
+    return {
+      valid: false,
+
+      email: '',
+      password: '',
+
+      emailRules: [
+        v => !!v || 'E-mail is required',
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+      ],
+    }
+  },
+
+  methods: {
+    async login() {
+      try {
+        const response = await AuthenticationService.login({
+          email: this.email,
+          password: Crypto.createHash("sha256").update(this.password).digest("hex"),
+        });
+
+        console.log(response);
+        this.$store.dispatch("login", response.data);
+
+      } catch (error) {
+        console.log("Login failed");
+        console.log(error);
+      }
+    },
+  }
+}
+```
+
+Don't forget to call the `login` action of the store with the user object retrieved from the api.
