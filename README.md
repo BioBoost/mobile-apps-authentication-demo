@@ -1,24 +1,27 @@
-# authentication-demo
+# Demo of Frontend Authentication
 
-## Project setup
-```
-yarn install
+Using VueJS (2), Vuetify, Axios, Vuex and Vue-router.
+
+Usable backend for demonstrational purposes: [My Devices](https://github.com/BioBoost/my-devices-backend).
+
+## Setting Up Vue Project
+
+Create a new Vue App
+
+```bash
+vue create authentication-demo
 ```
 
-### Compiles and hot-reloads for development
+Select features manually and make sure to select the `Router`. We'll add `Vuex` later. Leave defaults for the rest.
+
+Next add `vuetify` using (keep defaults):
+
+```bash
+vue add vuetify
 ```
+
+Start the app:
+
+```bash
 yarn serve
 ```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
