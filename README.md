@@ -703,3 +703,31 @@ computed: {
 
 Or you could create a store getter that return `true` if a user is logged in!
 
+## Persistent Store
+
+Maybe you may not have noticed but when you refresh the page using `F5` you will be logged out. That is because the store is not persisting its information between page reloads.
+
+This can be fixed by installing the `vuex-persistedstate` package and enabling it in the store.
+
+```bash
+yarn add vuex-persistedstate
+```
+
+```js
+import Vue from "vue";
+import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  plugins: [createPersistedState()],
+
+  strict: true,
+
+  state: {
+    user: {},
+  },
+
+// ....
+```
