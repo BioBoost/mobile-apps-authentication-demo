@@ -248,3 +248,46 @@ and configuring the login button in `App.vue`:
 ```html
 <v-btn color="white" to="/login" text>Login</v-btn>
 ```
+
+## Setting up the Authentication Service
+
+Next we'll setup the `AuthenticationService` which will provide us with the axios calls required for authentication.
+
+Before we do this, we will have to add `axios` as a dependency to our project:
+
+```bash
+yarn add axios
+```
+
+Next setup an axios instance in the file `services/Api.js`:
+
+```js
+import axios from "axios";
+
+export default () => {
+  let api = axios.create({
+    baseURL: `http://localhost:8081`
+  });
+  return api
+};
+```
+
+In a real application the backend url should be made available using environment variables.
+
+Next create the `services/AuthenticationService.js` file which will provide the authentication service to the backend api:
+
+```js
+import Api from "@/services/Api";
+
+export default {
+  register(accountInfo) {
+    return Api().post("register", accountInfo);
+  },
+  login(credentials) {
+    return Api().post("login", credentials);
+  },
+  logout() {
+    return Api().delete("logout");
+  },
+};
+```
