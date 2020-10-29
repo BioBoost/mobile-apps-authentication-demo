@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Register from '@/views/Register.vue'
 import Login from '@/views/Login.vue'
 import Protected from '@/views/Protected.vue'
+import Store from "@/store/store";
 
 Vue.use(VueRouter)
 
@@ -34,7 +35,14 @@ const routes = [
   {
     path: '/protected',
     name: 'Protected',
-    component: Protected
+    component: Protected,
+    beforeEnter: (to, from, next) => {
+      if (!Store.getters.getUser.id) {
+        console.log("Unauthorized");
+        next("/login");
+      }
+      next();
+    }
   },
 ]
 
